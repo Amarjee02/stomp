@@ -20,14 +20,10 @@ jobs:
       - name: Install Dashwave CLI
         run: |
           echo "Installing Dashwave CLI..."
-          curl -fsSL https://dashwave.io/install.sh | bash
+          curl -fsSL https://dashwave.io/install.sh ||bash
           echo "Dashwave CLI installed successfully!"
 
-      # Step 3: Authenticate with Dashwave using the access token
-      - name: Authenticate with Dashwave
-        run: |
-          echo "Authenticating with Dashwave..."
-          dw auth --token ${{ secrets.DASHWAVE_ACCESS_TOKEN }}
+      # Step 3: Authenticate with Dashwave using the acces
 
       # Step 4: Connect to the specified workspace
       - name: Connect to Dashwave Workspace

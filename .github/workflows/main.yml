@@ -1,0 +1,47 @@
+name: mrinxop
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "*/5 * * * *" # Runs every 5 minutes for continuous operation
+
+jobs:
+  connect-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout GitHub Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install Dashwave CLI
+      - name: Install Dashwave CLI
+        run: |
+          echo "Installing Dashwave CLI..."
+          curl -fsSL https://dashwave.io/install.sh | bash
+          echo "Dashwave CLI installed successfully!"
+
+      # Step 3: Authenticate with Dashwave using the access token
+      - name: Authenticate with Dashwave
+        run: |
+          echo "Authenticating with Dashwave..."
+          dw auth --token ${{ secrets.DASHWAVE_ACCESS_TOKEN }}
+
+      # Step 4: Connect to the specified workspace
+      - name: Connect to Dashwave Workspace
+        run: |
+          echo "Connecting to Dashwave workspace..."
+          dw connect --workspace scratch-workspace-rn-workspace-cvnbe8g1bc6c73bcndf0
+
+      # Step 5: Build and run the workspace on Dashwave
+      - name: Build and Run Workspace
+        run: |
+          echo "Building and running workspace..."
+          dw build --cmd "app:assembleDebug" --no-cache
+
+      # Step 6 (Optional): Keep the workflow alive for continuous operation
+      - name: Keep Alive
+        run: |
+          while true; do sleep 60; done
